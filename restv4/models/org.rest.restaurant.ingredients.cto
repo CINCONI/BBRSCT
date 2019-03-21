@@ -1,0 +1,90 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.rest.restaurant.ingredients
+import org.rest.restaurant.participant.*
+import org.rest.restaurant.preppedfood.PreppedFood
+
+asset Ingredient identified by ingredientID{
+  o String ingredientID
+  o String ownedBy
+  o String ingredientName
+  o TypeIng type
+  o Double quantity range=[0.0,]
+  o UsedStat usedAsFood default="No"
+  o String currentLocationI
+  o Double TempAsCelsius range=[-100.0,]
+  o Double Humidity 
+  o Double Price range=[0.0,]
+  o DateTime origin
+}
+enum TypeIng{
+  o Fish
+  o Meat
+  o Vegetable
+  o Fruit
+  o Spice
+  o Beverage
+  o Sauce
+  o Preservative
+  o Vinegar
+  o Dairy
+  o WheatItem
+  o RiceItem
+  o Bread
+  o Oil
+}
+enum UsedStat{
+  o Yes
+  o No
+}
+transaction Buy{
+  --> Ingredient IngBuy optional
+  --> Processors ProcBuy optional
+  --> Distributors DistBuy optional
+  --> Home_Cust HcustBuy optional
+  --> PreppedFood PfoodBuy optional
+}
+event Bought{
+  o String ingredientID optional
+  o String ownedBy optional
+  o String pfoodID optional
+}
+transaction Sell{
+  --> Ingredient IngSell 
+  --> Producers ProdSell optional
+  --> Processors ProcSell optional
+  --> Distributors DistSell optional
+}
+event Sold{
+  o String ingredientID
+  o String ownedBy
+}
+transaction AddIngredients{
+  --> Ingredient addIng
+}
+event AddedIngredients{
+  o String ingredientID
+}
+transaction IngToFood{
+  o UsedStat usedAsFood
+}
+event IngUsed{
+  o String ingredientID
+  o UsedStat usedAsFood
+}

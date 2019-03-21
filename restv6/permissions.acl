@@ -1,0 +1,121 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.rest.restaurant.participant.*"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule RestNetworkAdmin {
+  description: "Grants RestNetworkAdmin READ access to all network resources."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: READ
+  resource: "org.rest.restaurant.**"
+  condition: (p.ptype == "RestNetworkAdmin")
+  action: ALLOW
+}
+
+rule RestPersonnel {
+  description: "Grants RestPersonnel READ/UPDATE access to Ingredients and participant details."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: READ,UPDATE
+  resource(r): "org.rest.restaurant.**"
+  condition: (p.ptype == "RestPersonnel")
+  action: ALLOW
+}
+
+rule Producer {
+  description: "Grants Producer ALL access to their assets."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: ALL
+  resource(r): "org.rest.restaurant.**"
+  condition: ((p.ptype == "Producers") && ((r.ingredients.Ingredient.ownedBy== p)||(r.transport.Owner==p.contact.fname+" "+p.contact.lname)))
+  action: ALLOW
+}
+
+rule Processor {
+  description: "Grants Processor ALL access to their assets."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: ALL
+  resource(r): "org.rest.restaurant.**"
+  condition: ((p.ptype == "Processors") && ((r.ingredients.Ingredient.ownedBy== p)||(r.transport.Owner==p.contact.fname+" "+p.contact.lname)))
+  action: ALLOW
+}
+
+rule Distributor {
+  description: "Grants Distributor ALL access to their assets."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: ALL
+  resource(r): "org.rest.restaurant.**"
+  condition: ((p.ptype == "Distributors") && ((r.ingredients.Ingredient.ownedBy== p)||(r.transport.Owner==p.contact.fname+" "+p.contact.lname)))
+  action: ALLOW
+}
+
+rule Customer {
+  description: "Grants Customer READ access to ingredients."
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: READ
+  resource(r): "org.rest.restaurant.ingredients.*"
+  condition: (p.ptype == "Customer")
+  action: ALLOW
+}
+
+rule RestPartHistorianPermission {
+  description: "Grants all RestParticipants access to the historian record"
+  participant: "org.rest.restaurant.participant.RestParticipant"
+  operation: CREATE
+  resource: "org.hyperledger.composer.system.HistorianRecord"
+  action: ALLOW
+}
+
+rule TranBuy {
+  description: "Everyone except Producer, RestNetworkAdmin, Customer"
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: CREATE
+  resource: "org.rest.restaurant.**"
+  transaction: "org.rest.restaurant.ingredients.Buy"
+  condition: ((p.ptype!="Producers")&&(p.ptype!="RestNetworkAdmin")&&(p.ptype!="Customer"))
+  action: ALLOW
+}
+
+rule TranSell {
+  description: "Everyone except RestPersonnel, RestNetworkAdmin, Customer"
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: CREATE
+  resource: "org.rest.restaurant.**"
+  transaction: "org.rest.restaurant.ingredients.Sell"
+  condition: ((p.ptype!="RestPersonnel")&&(p.ptype!="RestNetworkAdmin")&&(p.ptype!="Customer"))
+  action: ALLOW
+}
+
+rule TranAddIng {
+  description: "Only Producers"
+  participant(p): "org.rest.restaurant.participant.RestParticipant"
+  operation: CREATE
+  resource: "org.rest.restaurant.**"
+  transaction: "org.rest.restaurant.ingredients.AddIngredients"
+  condition: (p.ptype=="Producers")
+  action: ALLOW
+}

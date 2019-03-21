@@ -1,0 +1,9 @@
+namespace org.rest.restaurant.preppedfood
+
+asset PreppedFood identified by pfoodID{
+  o String pfoodID
+  o String currentLocationP
+  o DateTime preppedTime
+  o DateTime delTime
+  o String deliveryguyID
+}

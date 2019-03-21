@@ -1,0 +1,36 @@
+namespace org.rest.restaurant.participant
+
+abstract participant RestParticipant identified by pID{
+  o String pID
+  o Contact contact
+}
+concept Contact{
+  o String fname
+  o String lname
+  o String Company
+  o String contactNumber
+  o String email
+  o String address
+}
+participant RestNetworkAdmin extends RestParticipant{
+
+}
+participant RestPersonnel extends RestParticipant{
+  o String restID
+  o String wType
+}
+participant Producers extends RestParticipant{
+  o String pType
+}
+participant Processors extends RestParticipant{
+
+}
+participant Distributors extends RestParticipant{
+
+}
+participant Customers extends RestParticipant{
+
+}
+participant Home_Cust extends RestParticipant{
+  o String custidentifier
+}

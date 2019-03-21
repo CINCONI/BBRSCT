@@ -1,0 +1,30 @@
+query RestPersonnelDetails{
+  description: "Returns all details of all restaurant employees."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "RestPersonnel")
+}
+query RestNetworkAdminDetails{
+  description: "Returns all details of Restaurant Network Admin."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "RestNetworkAdmin")
+}
+query ProducersDetails{
+  description: "Returns all details of all Producers."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "Producers")
+}
+query ProcessorsDetails{
+  description: "Returns all details of all Processors."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "Processors")
+}
+query DistributorsDetails{
+  description: "Returns all details of all Distributors."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "Distributors")
+}
+query CustomersDetails{
+  description: "Returns all details of all Customers."
+  statement:
+    SELECT org.rest.restaurant.participant.RestParticipant WHERE (ptype == "Customer")
+}

@@ -1,0 +1,25 @@
+namespace org.rest.restaurant.transport
+import org.rest.restaurant.ingredients.Ingredient
+asset Transport identified by transportID{
+  o String transportID
+  o String Owner
+  o String currentLocationT
+  o Status statusT default="Idle"
+  --> Ingredient[] ingredientsInTransit optional 
+}
+enum Status{
+  o Idle
+  o Active
+}
+transaction Delivered{
+  --> Ingredient[] ingredientsDelivered
+  --> Transport transportUsed
+}
+transaction Transported{
+  --> Ingredient[] ingredientsTransported
+  --> Transport transportBeingUsed
+}
+transaction Add_transport{
+  o String transportID
+  o String Owner
+}

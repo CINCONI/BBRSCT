@@ -1,0 +1,27 @@
+namespace org.rest.restaurant.participant
+
+abstract participant RestParticipant identified by pID{
+  o String pID
+  o pType ptype
+  o Contact contact
+  o String restID optional
+  o String wType optional
+  o String prodType optional
+  o String custidentifier optional
+}
+concept Contact{
+  o String fname
+  o String lname
+  o String Company
+  o String contactNumber
+  o String email
+  o String address
+}
+enum pType{
+  o RestNetworkAdmin
+  o RestPersonnel
+  o Producers
+  o Processors
+  o Distributors
+  o Customer
+}
